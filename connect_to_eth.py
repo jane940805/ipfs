@@ -33,7 +33,7 @@ def connect_with_middleware(contract_json):
 	w3 = Web3(Web3.HTTPProvider(bnb_testnet_provider))
 
 	# Check if the connection is successful
-	if not w3.isConnected():
+	if not w3.is_connected():
 		raise Exception("Unable to connect to the BNB testnet")
 
 	w3.middleware_onion.inject(geth_poa_middleware, layer=0)
