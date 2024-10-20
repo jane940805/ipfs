@@ -11,7 +11,7 @@ infura_url = f"https://mainnet.infura.io/v3/{infura_token}"
 
 
 def connect_to_eth():
-	url = "https://eth-mainnet.g.alchemy.com/v2/iZu9NnlgGt50L9PhmENlgvQYgyLUZjJS"  # FILL THIS IN
+	url = "https://opbnb-mainnet.infura.io/v3/2c3d72dd622d4fc1a9d2999566ddbc32"  # FILL THIS IN
 	w3 = Web3(HTTPProvider(url))
 	assert w3.is_connected(), f"Failed to connect to provider at {url}"
 	return w3
@@ -27,7 +27,7 @@ def connect_with_middleware(contract_json):
 	
 	# Connect to BNB testnet using an HTTP provider
 	# Replace the provider URL with the actual BNB testnet provider URL (you may use a public node or Infura-like services)
-	bnb_testnet_provider = "https://eth-mainnet.g.alchemy.com/v2/iZu9NnlgGt50L9PhmENlgvQYgyLUZjJS"
+	bnb_testnet_provider = "https://opbnb-testnet.infura.io/v3/2c3d72dd622d4fc1a9d2999566ddbc32"
 		
 	# Initialize the Web3 object
 	w3 = Web3(Web3.HTTPProvider(bnb_testnet_provider))
