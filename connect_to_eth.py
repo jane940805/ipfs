@@ -27,14 +27,13 @@ def connect_with_middleware(contract_json):
 	
 	# Connect to BNB testnet using an HTTP provider
 	# Replace the provider URL with the actual BNB testnet provider URL (you may use a public node or Infura-like services)
-	bnb_testnet_provider = "https://opbnb-testnet.infura.io/v3/2c3d72dd622d4fc1a9d2999566ddbc32"
+	bnb_testnet_provider = "https://bsc-testnet.infura.io/v3/2c3d72dd622d4fc1a9d2999566ddbc32"
 		
 	# Initialize the Web3 object
 	w3 = Web3(Web3.HTTPProvider(bnb_testnet_provider))
 
 	# Check if the connection is successful
-	if not w3.is_connected():
-		raise Exception("Unable to connect to the BNB testnet")
+	assert w3.is_connected(), f"Failed to connect to provider at {url}"
 
 	w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
