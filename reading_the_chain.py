@@ -64,9 +64,9 @@ def is_ordered_block(w3, block_num):
 	priority_fees = []
 
 	for tx in block['transactions']:
-		if tx['type'] == 0:  # Type 0, Legacy transaction
+		if tx.type == 0:  # Type 0, Legacy transaction
 			priority_fee = tx['gasPrice']
-		elif tx['type'] == 2:  # Type 2 transaction (EIP-1559)
+		elif tx.type == 2:  # Type 2 transaction (EIP-1559)
 			max_priority_fee = tx.get('maxPriorityFeePerGas')
 			max_fee = tx.get('maxFeePerGas')
 			priority_fee = min(max_priority_fee, max_fee - base_fee)
