@@ -113,7 +113,7 @@ def get_contract_values(contract, admin_address, owner_address):
 	has_role = contract.functions.hasRole(default_admin_role, admin_address).call()
     
     # Get the prime value associated with owner_address
-	prime = contract.functions.getPrime(owner_address).call()
+	prime = contract.functions.getPrimeByOwner(owner_address).call()
 
 	return onchain_root, has_role, prime
 
