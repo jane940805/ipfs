@@ -63,7 +63,8 @@ def is_ordered_block(w3, block_num):
     # List to hold calculated priority fees
 	priority_fees = []
 
-	for tx in block['transactions']:
+	for tx_string in block['transactions']:
+		tx = w3.eth.get_transactions(tx_string)
 		if tx.type == 0:  # Type 0, Legacy transaction
 			priority_fee = tx['gasPrice']
 		elif tx.type == 2:  # Type 2 transaction (EIP-1559)
