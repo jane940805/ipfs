@@ -13,6 +13,7 @@ contract_address = Web3.to_checksum_address(bayc_address)
 #In general, you can get contract ABIs from etherscan
 #https://api.etherscan.io/api?module=contract&action=getabi&address=0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D
 with open('/home/codio/workspace/abi.json', 'r') as f:
+#with open('/Users/yuzeng/Desktop/MCIT/CIT583/Week2/abi.json', 'r') as f:
 	abi = json.load(f) 
 
 ############################
@@ -37,9 +38,8 @@ def get_ape_info(apeID):
     # Get owner and token URI from the contract
 	data['owner'] = contract.functions.ownerOf(apeID).call()
 	token_uri = contract.functions.tokenURI(apeID).call()
-	
 	# Fetch metadata from IPFS and parse for image and eyes
-	uri_address = "https://gateway.pinata.cloud/ipsf" + token_uri[7:]
+	uri_address = "https://ipfs.io/ipfs/" + token_uri[7:]
 	metadata = requests.get(uri_address).json()
 
 	data['image'] = metadata.get("image")
