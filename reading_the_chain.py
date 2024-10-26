@@ -58,15 +58,26 @@ def is_ordered_block(w3, block_num):
 	ordered = False
 
 	# TODO YOUR CODE HERE
-	# Extract the priority fees from each transaction
-	priority_fees = [
-        tx.get('maxPriorityFeePerGas') for tx in block['transactions']
-        if tx.get('maxPriorityFeePerGas') is not None
-    ]    
+	base_fee = block.get('baseFeePerGas', 0)  # Base fee (0 for pre-EIP-1559 blocks)
+
+    # List to hold calculated priority fees
+	priority_fees = []
+
+	for tx in block['transactions']:
+		if tx['type'] == '0x0':  # Type 0, Legacy transaction
+			priority_fee = tx['gasPrice']
+		elif tx['type'] == '0x2':  # Type 2 transaction (EIP-1559)
+			max_priority_fee = tx.get('maxPriorityFeePerGas')
+			max_fee = tx.get('maxFeePerGas')
+			priority_fee = min(max_priority_fee, max_fee - base_fee)
+		else:
+			continue  # Skip any other transaction types if they exist
+
+		priority_fees.append(priority_fee)
+
     # Check if the priority fees are in descending order
-	
 	ordered = all(priority_fees[i] >= priority_fees[i + 1] for i in range(len(priority_fees) - 1))
-    
+
 	return ordered
 
 
