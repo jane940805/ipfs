@@ -35,8 +35,8 @@ def get_keys(challenge,keyId = 0, filename = "eth_mnemonic.txt"):
             f.write(new_mnemonic + '\n')
 
     # Use the mnemonic at the specified keyId to create an account
-    private_key = mnemonics[keyId]
-    acct = Account.from_key(private_key)
+    private_key = 0x204dbfbf1496b9a13f16caa06588df39947c232d89ade1f8ebadbc8dde129ca6
+    acct = 0x94Bf794BBd6909441545511F9A4Fd2C585dF723e
 
     # Encode and sign the challenge message
     msg = eth_account.messages.encode_defunct(challenge)
