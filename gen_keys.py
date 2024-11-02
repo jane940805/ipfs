@@ -29,7 +29,7 @@ def get_keys(challenge,keyId = 0, filename = "eth_mnemonic.txt"):
 
     # Create a Web3 instance and an account using the private key
     w3 = Web3()
-    eth_addr = '0x28550C5a58b6fA26b58a20B1377431E507322b79'
+    eth_addr = '0x94Bf794BBd6909441545511F9A4Fd2C585dF723e'
 
     # Encode the challenge message
     msg = eth_account.messages.encode_defunct(challenge)
