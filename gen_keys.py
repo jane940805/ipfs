@@ -15,13 +15,13 @@ def get_keys(challenge,keyId = 0, filename = "eth_mnemonic.txt"):
     If fewer than (keyId+1) mnemonics have been generated, generate a new one and return that
     """
     # Replace this with your private key (keep this secure and do not share it)
-    private_key = "0x204dbfbf1496b9a13f16caa06588df39947c232d89ade1f8ebadbc8dde129ca6"
+    private_key = "e1bef06dbde74fae23a2e93b6e7c707abe89925b8dd8541fd4d5a587a109508a"
 
 	#YOUR CODE HERE
 
-    # # Check if the mnemonic file exists; if not, create it
-    # if not os.path.exists(filename):
-    #     open(filename, 'w').close()
+    # Check if the mnemonic file exists; if not, create it
+    if not os.path.exists(filename):
+        open(filename, 'w').close()
 
     # Read existing mnemonics
     with open(filename, 'r') as f:
@@ -29,7 +29,7 @@ def get_keys(challenge,keyId = 0, filename = "eth_mnemonic.txt"):
 
     # Create a Web3 instance and an account using the private key
     w3 = Web3()
-    eth_addr = '0x94Bf794BBd6909441545511F9A4Fd2C585dF723e'
+    eth_addr = '0x28550C5a58b6fA26b58a20B1377431E507322b79'
 
     # Encode the challenge message
     msg = eth_account.messages.encode_defunct(challenge)
