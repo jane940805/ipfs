@@ -4,12 +4,6 @@ import os
 from eth_account import Account
 
 
-# Replace this line with your actual private key (ensure you store it securely and do not share it in public code)
-PRIVATE_KEY = "your_private_key_here"  # Replace with your actual private key
-
-
-
-
 def get_keys(challenge,keyId = 0, filename = "eth_mnemonic.txt"):
     """
     Generate a stable private key
@@ -20,8 +14,8 @@ def get_keys(challenge,keyId = 0, filename = "eth_mnemonic.txt"):
     Each mnemonic is stored on a separate line
     If fewer than (keyId+1) mnemonics have been generated, generate a new one and return that
     """
-
-    w3 = Web3()
+    # Replace this with your private key (keep this secure and do not share it)
+    private_key = "0x204dbfbf1496b9a13f16caa06588df39947c232d89ade1f8ebadbc8dde129ca6"
 
 	#YOUR CODE HERE
 
@@ -29,23 +23,24 @@ def get_keys(challenge,keyId = 0, filename = "eth_mnemonic.txt"):
     # if not os.path.exists(filename):
     #     open(filename, 'w').close()
 
-    # # Read existing mnemonics
-    # with open(filename, 'r') as f:
-    #     mnemonics = [line.strip() for line in f.readlines()]
+    # Read existing mnemonics
+    with open(filename, 'r') as f:
+        mnemonics = [line.strip() for line in f.readlines()]
 
-    # Create an account instance from the provided private key
-    account = eth_account.Account.from_key(PRIVATE_KEY)
+    # Create a Web3 instance and an account using the private key
+    w3 = Web3()
+    account = eth_account.Account.from_key(private_key)
     eth_addr = account.address
 
-    # Sign the challenge message
+    # Encode the challenge message
     msg = eth_account.messages.encode_defunct(challenge)
-    sig = w3.eth.account.sign_message(msg, private_key=PRIVATE_KEY)
 
-    # Ensure the signature can be recovered back to the correct address
-    assert eth_account.Account.recover_message(msg, signature=sig.signature.hex()) == eth_addr, \
-        f"Failed to sign message properly"
+    # Sign the message using the account
+    sig = w3.eth.account.sign_message(msg, private_key=private_key)
 
-    # Return the signature and account address
+    assert eth_account.Account.recover_message(msg, signature=sig.signature.hex()) == eth_addr, "Failed to sign message properly"
+
+    # Return the signature and Ethereum address
     return sig, eth_addr
 
 if __name__ == "__main__":
