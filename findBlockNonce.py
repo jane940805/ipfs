@@ -46,7 +46,7 @@ def mine_block(k, prev_hash, rand_lines):
     nonce_bytes = str(nonce).encode('utf-8')
 
     assert isinstance(nonce_bytes, bytes), 'nonce should be of type bytes'
-    return nonce
+    return nonce_bytes
 
 
 def get_random_lines(filename, quantity):
