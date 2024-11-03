@@ -70,7 +70,7 @@ def convert_leaves(primes_list):
 
     # TODO YOUR CODE HERE
 
-    return [num.to_bytes((num.bit_length() + 7) // 8, byteorder='big') for num in primes_list]
+    return [Web3.toBytes(num).rjust(32, b'\x00') for num in primes_list]
 
 
 def build_merkle(leaves):
