@@ -155,11 +155,11 @@ def send_signed_msg(proof, random_leaf):
         'chainId': 97,  # BNB testnet chain ID
         'gas': 3000000,
         'gasPrice': w3.to_wei('10', 'gwei'),
-        'nonce': w3.eth.getTransactionCount(acct.address),
+        'nonce': w3.eth.get_transaction_count(acct.address),
     })
 
     signed_transaction = w3.eth.account.sign_transaction(transaction, acct.key)
-    tx_hash = w3.eth.sendRawTransaction(signed_transaction.raw_transaction)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.raw_transaction)
     return tx_hash.hex()
 
 
