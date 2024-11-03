@@ -12,6 +12,25 @@ contract MToken is ERC20 {
 }
 
 
+contract BridgeToken is ERC20 {
+    address public owner;
+
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {
+        owner = msg.sender;
+    }
+
+    function mint(address to, uint256 amount) external {
+        require(msg.sender == owner, "Not authorized to mint");
+        _mint(to, amount);
+    }
+
+    function burn(address from, uint256 amount) external {
+        require(msg.sender == owner || msg.sender == from, "Not authorized to burn");
+        _burn(from, amount);
+    }
+}
+
+
 contract Destination is AccessControl {
     bytes32 public constant CREATOR_ROLE = keccak256("CREATOR_ROLE");
     bytes32 public constant WARDEN_ROLE = keccak256("WARDEN_ROLE");
