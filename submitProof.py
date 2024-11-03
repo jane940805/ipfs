@@ -4,7 +4,7 @@ import string
 import json
 from pathlib import Path
 from web3 import Web3
-from web3.middleware import geth_poa_middleware  # Necessary for POA chains
+from web3.middleware import ExtraDataToPOAMiddleware  # Necessary for POA chains
 
 
 def merkle_assignment():
@@ -69,15 +69,15 @@ def convert_leaves(primes_list):
     """
 
     # TODO YOUR CODE HERE
-
-    return [Web3.toBytes(num).rjust(32, b'\x00') for num in primes_list]
+    # print([num.to_bytes((num.bit_length() + 7) // 8, byteorder='big') for num in primes_list])
+    return [Web3.to_bytes(num).rjust(32, b'\x00') for num in primes_list]
 
 
 def build_merkle(leaves):
     """
         Function to build a Merkle Tree from the list of prime numbers in bytes32 format
         Returns the Merkle tree (tree) as a list where tree[0] is the list of leaves,
-        tree[1] is the parent hashes, and so on until tree[n] which is the root hash
+        tree[1] is the parent hashes, and so on until tree[n]clearwhich is the root hash
         the root hash produced by the "hash_pair" helper function
     """
 
@@ -178,7 +178,7 @@ def connect_to(chain):
         api_url = f"https://data-seed-prebsc-1-s1.binance.org:8545/"  # BSC testnet
     w3 = Web3(Web3.HTTPProvider(api_url))
     # inject the poa compatibility middleware to the innermost layer
-    w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+    w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 
     return w3
 
