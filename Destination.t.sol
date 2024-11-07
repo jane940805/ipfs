@@ -64,6 +64,13 @@ contract Destination is AccessControl {
     function wrap(address underlying, address recipient, uint256 amount) external onlyRole(WARDEN_ROLE) {
         address wrappedTokenAddress = wrapped_tokens[underlying];
         require(wrappedTokenAddress != address(0), "Token not registered");
+		
+		ERC20 underlyingToken = ERC20(underlying_token);
+		uint256 senderBalance = underlyingToken.balanceOf(msg.sender);
+		require(senderBalance >= amount, "Insufficient underlying token balance");
+		
+		bool success = underlyingToken.transferFrom(msg.sender, address(this), amount);
+		require(success, "Transfer failed");
 
         BridgeToken bridgeToken = BridgeToken(wrappedTokenAddress);
         bridgeToken.mint(recipient, amount);
