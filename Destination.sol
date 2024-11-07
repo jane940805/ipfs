@@ -49,7 +49,7 @@ contract Destination is AccessControl {
 
         // Deploy new BridgeToken and store its address
         BridgeToken newBridgeToken = new BridgeToken(name, symbol, underlying);
-        BridgeTokens[underlying] = address(newBridgeToken);
+        BridgeToken[underlying] = address(newBridgeToken);
 
         emit Creation(underlying, address(newBridgeToken));
         return address(newBridgeToken);
