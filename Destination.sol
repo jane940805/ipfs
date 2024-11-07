@@ -22,66 +22,52 @@ event Unwrap( address indexed underlying_token, address indexed wrapped_token, a
         _grantRole(WARDEN_ROLE, admin);
     }
 
-function wrap(address _underlying_token, address _recipient, uint256 _amount ) public onlyRole(WARDEN_ROLE) {
-//YOUR CODE HERE
-// Ensure the wrapped token is already created
-address wrappedToken = wrapped_tokens[_underlying_token];
+function wrap(address underlying token, address  recipient, uint256 amount ) public onlyRole(WARDEN_ROLE) {
+
+address wrappedToken = wrapped_tokens[underlying token];
 require(wrappedToken != address(0), "Wrapped token not created");
 
-// Transfer the underlying token to the contract
-ERC20 underlyingToken = ERC20(_underlying_token);
+ERC20 underlyingToken = ERC20(underlying token);
 uint256 senderBalance = underlyingToken.balanceOf(msg.sender);
-require(senderBalance >= _amount, "Insufficient underlying token balance");
+require(senderBalance >= amount, "Insufficient underlying token balance");
 
-// Transfer the underlying token from sender to the contract
-bool success = underlyingToken.transferFrom(msg.sender, address(this), _amount);
+bool success = underlyingToken.transferFrom(msg.sender, address(this), amount);
 require(success, "Transfer failed");
 
-// Mint the wrapped tokens to the recipient
-BridgeToken(wrappedToken).mint(_recipient, _amount);
+BridgeToken(wrappedToken).mint(_recipient, amount);
 
-// Emit event
-emit Wrap(_underlying_token, wrappedToken, _recipient, _amount);
+emit Wrap(underlying token, wrappedToken, _recipient, amount);
 
 }
 
-function unwrap(address _wrapped_token, address _recipient, uint256 _amount ) public {
-//YOUR CODE HERE
-// Ensure the wrapped token is valid
+function unwrap(address _wrapped_token, address  recipient, uint256 amount ) public {
+
 address underlyingToken = underlying_tokens[_wrapped_token];
 require(underlyingToken != address(0), "Invalid wrapped token");
 
-// Ensure the sender has enough balance of the wrapped token
 BridgeToken wrappedToken = BridgeToken(_wrapped_token);
 uint256 wrappedTokenBalance = wrappedToken.balanceOf(msg.sender);
-require(wrappedTokenBalance >= _amount, "Insufficient wrapped token balance");
+require(wrappedTokenBalance >= amount, "Insufficient wrapped token balance");
 
-// Burn the wrapped tokens
-//BridgeToken(_wrapped_token).burnFrom(msg.sender, _amount);
-wrappedToken.burnFrom(msg.sender, _amount);
+wrappedToken.burnFrom(msg.sender, amount);
 
-// Transfer the underlying tokens to the recipient
-ERC20(underlyingToken).transfer(_recipient, _amount);
+ERC20(underlyingToken).transfer(_recipient, amount);
 
-// Emit event
-emit Unwrap(underlyingToken, _wrapped_token, msg.sender, _recipient, _amount);
+emit Unwrap(underlyingToken, _wrapped_token, msg.sender, _recipient, amount);
 
 }
 
-function createToken(address _underlying_token, string memory name, string memory symbol ) public onlyRole(CREATOR_ROLE) returns(address) {
-//YOUR CODE HERE
-// Ensure the token doesn't already exist
-require(wrapped_tokens[_underlying_token] == address(0), "Wrapped token already exists");
+function createToken(address underlying token, string memory name, string memory symbol ) public onlyRole(CREATOR_ROLE) returns(address) {
 
-// Deploy the new BridgeToken contract
-BridgeToken bridgeToken = new BridgeToken(_underlying_token, name, symbol, msg.sender);
+require(wrapped_tokens[underlying token] == address(0), "Wrapped token already exists");
 
-// Map the underlying token to its wrapped token
-wrapped_tokens[_underlying_token] = address(bridgeToken);
-underlying_tokens[address(bridgeToken)] = _underlying_token;
 
-// Emit event
-emit Creation(_underlying_token, address(bridgeToken));
+BridgeToken bridgeToken = new BridgeToken(underlying token, name, symbol, msg.sender);
+
+wrapped_tokens[underlying token] = address(bridgeToken);
+underlying_tokens[address(bridgeToken)] = underlying token;
+
+emit Creation(underlying token, address(bridgeToken));
 return address(bridgeToken);
 
 }
