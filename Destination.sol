@@ -23,7 +23,7 @@ contract Destination is AccessControl {
     }
 
 	function wrap(address underlying, address recipient, uint256 amount) external onlyRole(WARDEN_ROLE) {
-        address bridgeTokenAddr = BridgeTokens[underlying];
+        address bridgeTokenAddr = BridgeToken[underlying];
         require(bridgeTokenAddr != address(0), "Underlying asset not registered");
 
         // Mint bridge tokens to recipient
@@ -45,7 +45,7 @@ contract Destination is AccessControl {
     }
 
 	function createToken(address underlying, string memory name, string memory symbol) external onlyRole(CREATOR_ROLE) returns (address) {
-        require(BridgeTokens[underlying] == address(0), "Token already created");
+        require(BridgeToken[underlying] == address(0), "Token already created");
 
         // Deploy new BridgeToken and store its address
         BridgeToken newBridgeToken = new BridgeToken(name, symbol, underlying);
