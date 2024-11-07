@@ -4,7 +4,7 @@ import string
 import json
 from pathlib import Path
 from web3 import Web3
-from web3.middleware import geth_poa_middleware  # Necessary for POA chains
+from web3.middleware import ExtraDataToPOAMiddleware  # Necessary for POA chains
 
 
 def merkle_assignment():
@@ -25,7 +25,7 @@ def merkle_assignment():
     tree = build_merkle(leaves)
 
     # Select a random leaf and create a proof for that leaf
-    random_leaf_index = 0 #TODO generate a random index from primes to claim (0 is already claimed)
+    random_leaf_index = random.randint(0,len(primes)-1)
     proof = prove_merkle(tree, random_leaf_index)
 
     # This is the same way the grader generates a challenge for sign_challenge()
@@ -159,8 +159,7 @@ def send_signed_msg(proof, random_leaf):
     })
 
     signed_transaction = w3.eth.account.sign_transaction(transaction, acct.key)
-    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
-    #tx_hash = w3.eth.send_raw_transaction(signed_transaction.raw_transaction)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.raw_transaction)
     return tx_hash.hex()
 
 
@@ -179,7 +178,7 @@ def connect_to(chain):
         api_url = f"https://data-seed-prebsc-1-s1.binance.org:8545/"  # BSC testnet
     w3 = Web3(Web3.HTTPProvider(api_url))
     # inject the poa compatibility middleware to the innermost layer
-    w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+    w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 
     return w3
 
