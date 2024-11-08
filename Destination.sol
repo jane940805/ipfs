@@ -27,18 +27,8 @@ contract Destination is AccessControl {
 		// Ensure the wrapped token is already created
     require(_amount > 0, "Cannot mint zero amount");
 		require(wrapped_tokens[_underlying_token] != address(0), "Wrapped token not created"); // check this line. You can't wrap unregistered token
-    //address wrappedToken = wrapped_tokens[_underlying_token];
-
-		// Transfer the underlying token to the contract
-		// ERC20 underlyingToken = ERC20(_underlying_token);
-		// uint256 senderBalance = underlyingToken.balanceOf(msg.sender);
-		// require(senderBalance >= _amount, "Insufficient underlying token balance"); // might not get to run
-
-		// // Transfer the underlying token from sender to the contract
-		// bool success = underlyingToken.transferFrom(msg.sender, address(this), _amount);
-		// require(success, "Transfer failed");
-
-		// Mint the wrapped tokens to the recipient
+ 
+ 		// Mint the wrapped tokens to the recipient
 		//BridgeToken(wrappedToken).mint(_recipient, _amount);
     BridgeToken(wrapped_tokens[_underlying_token]).mint(_recipient, _amount); 
     require(_recipient != address(0), "Cannot deposit to null account");
@@ -53,20 +43,12 @@ contract Destination is AccessControl {
 		// Ensure the wrapped token is valid
     require(_amount > 0, "Cannot mint zero amount");
 		require(underlying_tokens[_wrapped_token] != address(0), "Wrapped token not created"); 
-		// address underlyingToken = underlying_tokens[_wrapped_token];
-		// require(underlyingToken != address(0), "Invalid wrapped token");
-
-		// Ensure the sender has enough balance of the wrapped token
-		// BridgeToken wrappedToken = BridgeToken(_wrapped_token);
-		// uint256 wrappedTokenBalance = wrappedToken.balanceOf(msg.sender);
-		// require(wrappedTokenBalance >= _amount, "Insufficient wrapped token balance");
 
 		// Burn the wrapped tokens
 		BridgeToken(_wrapped_token).burnFrom(msg.sender, _amount);
 
 		// Transfer the underlying tokens to the recipient
 		// ERC20(underlyingToken).transfer(_recipient, _amount);
-
 
 		// Emit event
 		emit Unwrap(underlying_tokens[_wrapped_token], _wrapped_token, msg.sender, _recipient, _amount);
