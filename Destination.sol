@@ -25,23 +25,21 @@ contract Destination is AccessControl {
 	function wrap(address _underlying_token, address _recipient, uint256 _amount ) public onlyRole(WARDEN_ROLE) {
 		//YOUR CODE HERE
 		// Ensure the wrapped token is already created
-    require(_amount > 0, "Cannot mint zero amount");
-		require(wrapped_tokens[_underlying_token] != address(0), "Wrapped token not created"); // check this line. You can't wrap unregistered token
+        require(_amount > 0, "Cannot mint zero amount");
+		require(wrapped_tokens[_underlying_token] != address(0), "Wrapped token not created"); 
  
  		// Mint the wrapped tokens to the recipient
-		//BridgeToken(wrappedToken).mint(_recipient, _amount);
-    BridgeToken(wrapped_tokens[_underlying_token]).mint(_recipient, _amount); 
-    require(_recipient != address(0), "Cannot deposit to null account");
+        BridgeToken(wrapped_tokens[_underlying_token]).mint(_recipient, _amount); 
+        require(_recipient != address(0), "Cannot deposit to null account");
 
 		// Emit event
 		emit Wrap(_underlying_token, wrapped_tokens[_underlying_token], _recipient, _amount);
-
 	}
 
 	function unwrap(address _wrapped_token, address _recipient, uint256 _amount ) public {
 		//YOUR CODE HERE
 		// Ensure the wrapped token is valid
-    require(_amount > 0, "Cannot mint zero amount");
+        require(_amount > 0, "Cannot mint zero amount");
 		require(underlying_tokens[_wrapped_token] != address(0), "Wrapped token not created"); 
 
 		// Burn the wrapped tokens
