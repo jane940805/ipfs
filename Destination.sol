@@ -45,7 +45,7 @@ contract Destination is AccessControl {
 		// Burn the wrapped tokens
 		BridgeToken(_wrapped_token).burnFrom(msg.sender, amount);
 
-		// Transfer the underlying tokens to the recipient
+		// Transfer the tokens to the recipient
 		// ERC20(underlyingToken).transfer(recipient, amount);
 
 		// Emit event
@@ -61,7 +61,7 @@ contract Destination is AccessControl {
 		// Deploy the new BridgeToken contract
 		BridgeToken bridgeToken = new BridgeToken(underlying_token, name, symbol, address(this));
 
-		// Map the underlying token to its wrapped token
+		// Map the token to wrapped token
 		wrapped_tokens[underlying_token] = address(bridgeToken);
 		underlying_tokens[address(bridgeToken)] = underlying_token;
 		tokens.push(address(bridgeToken));
