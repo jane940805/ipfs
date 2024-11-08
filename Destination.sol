@@ -22,52 +22,52 @@ contract Destination is AccessControl {
         _grantRole(WARDEN_ROLE, admin);
     }
 
-	function wrap(address _underlying_token, address _recipient, uint256 _amount ) public onlyRole(WARDEN_ROLE) {
+	function wrap(address underlying_token, address recipient, uint256 amount ) public onlyRole(WARDEN_ROLE) {
 		//YOUR CODE HERE
 		// Ensure the wrapped token is already created
-        require(_amount > 0, "Cannot mint zero amount");
-		require(wrapped_tokens[_underlying_token] != address(0), "Wrapped token not created"); 
+        require(amount > 0, "Cannot mint zero amount");
+		require(wrapped_tokens[underlying_token] != address(0), "Wrapped token not created"); 
  
  		// Mint the wrapped tokens to the recipient
-        BridgeToken(wrapped_tokens[_underlying_token]).mint(_recipient, _amount); 
-        require(_recipient != address(0), "Cannot deposit to null account");
+        BridgeToken(wrapped_tokens[underlying_token]).mint(recipient, amount); 
+        require(recipient != address(0), "Cannot deposit to null account");
 
 		// Emit event
-		emit Wrap(_underlying_token, wrapped_tokens[_underlying_token], _recipient, _amount);
+		emit Wrap(underlying_token, wrapped_tokens[underlying_token], recipient, amount);
 	}
 
-	function unwrap(address _wrapped_token, address _recipient, uint256 _amount ) public {
+	function unwrap(address _wrapped_token, address recipient, uint256 amount ) public {
 		//YOUR CODE HERE
 		// Ensure the wrapped token is valid
-        require(_amount > 0, "Cannot mint zero amount");
+        require(amount > 0, "Cannot mint zero amount");
 		require(underlying_tokens[_wrapped_token] != address(0), "Wrapped token not created"); 
 
 		// Burn the wrapped tokens
-		BridgeToken(_wrapped_token).burnFrom(msg.sender, _amount);
+		BridgeToken(_wrapped_token).burnFrom(msg.sender, amount);
 
 		// Transfer the underlying tokens to the recipient
-		// ERC20(underlyingToken).transfer(_recipient, _amount);
+		// ERC20(underlyingToken).transfer(recipient, amount);
 
 		// Emit event
-		emit Unwrap(underlying_tokens[_wrapped_token], _wrapped_token, msg.sender, _recipient, _amount);
+		emit Unwrap(underlying_tokens[_wrapped_token], _wrapped_token, msg.sender, recipient, amount);
 
 	}
 
-	function createToken(address _underlying_token, string memory name, string memory symbol ) public onlyRole(CREATOR_ROLE) returns(address) {
+	function createToken(address underlying_token, string memory name, string memory symbol ) public onlyRole(CREATOR_ROLE) returns(address) {
 		//YOUR CODE HERE
 		// Ensure the token doesn't already exist
-		require(wrapped_tokens[_underlying_token] == address(0), "Wrapped token already exists");
+		require(wrapped_tokens[underlying_token] == address(0), "Wrapped token already exists");
 
 		// Deploy the new BridgeToken contract
-		BridgeToken bridgeToken = new BridgeToken(_underlying_token, name, symbol, address(this));
+		BridgeToken bridgeToken = new BridgeToken(underlying_token, name, symbol, address(this));
 
 		// Map the underlying token to its wrapped token
-		wrapped_tokens[_underlying_token] = address(bridgeToken);
-		underlying_tokens[address(bridgeToken)] = _underlying_token;
+		wrapped_tokens[underlying_token] = address(bridgeToken);
+		underlying_tokens[address(bridgeToken)] = underlying_token;
 		tokens.push(address(bridgeToken));
     
 		// Emit event
-		emit Creation(_underlying_token, address(bridgeToken));
+		emit Creation(underlying_token, address(bridgeToken));
 		return address(bridgeToken);
 
 	}
