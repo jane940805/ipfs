@@ -154,7 +154,7 @@ def send_signed_msg(proof, random_leaf):
     transaction = contract.functions.submit(proof, random_leaf).build_transaction({
         'chainId': 97,  # BNB testnet chain ID
         'gas': 3000000,
-        'gasPrice': w3.to_wei('10', 'gwei'),
+        'gasPrice': w3.to_wei('75', 'gwei'),
         'nonce': w3.eth.get_transaction_count(acct.address),
     })
 
