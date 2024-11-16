@@ -55,33 +55,30 @@ def scanBlocks(chain,start_block,end_block,contract_address):
     # Function to process and save events to CSV
     def log_events(events):
         for event in events:
-          rows.append({
-            "chain": chain,
-            "token": event.args.token,
-            "recipient": event.args.recipient,
-            "amount": event.args.amount,
-            "transactionHash": event.transactionHash.hex(),
-            "address": contract_address
-          })
+            row = {
+                "chain": chain,
+                "token": event.args.token,
+                "recipient": event.args.recipient,
+                "amount": event.args.amount,
+                "transactionHash": event.transactionHash.hex(),
+                "address": contract_address
+            }
+            rows.append(row)
+        # Append to CSV
         df = pd.DataFrame(rows)
         df.to_csv(eventfile, mode='a', index=False, header=not pd.io.common.file_exists(eventfile))
 
-    # Scan blocks for Deposit events
     if end_block - start_block < 30:
         event_filter = contract.events.Deposit.create_filter(fromBlock=start_block,toBlock=end_block,argument_filters=arg_filter)
         events = event_filter.get_all_entries()
+        #print( f"Got {len(events)} entries for block {block_num}" )
+        # YOUR CODE HERE
         log_events(events)
     else:
         for block_num in range(start_block,end_block+1):
             event_filter = contract.events.Deposit.create_filter(fromBlock=block_num,toBlock=block_num,argument_filters=arg_filter)
             events = event_filter.get_all_entries()
+            #print( f"Got {len(events)} entries for block {block_num}" )
+            # YOUR CODE HERE
             log_events(events)
-
-    print("Scanning completed and events logged to deposit_logs.csv.")
-    if rows:
-        df = pd.DataFrame(rows)
-        df.to_csv(eventfile, mode='a', index=False, header=not pd.io.common.file_exists(eventfile))
-        print(f"{len(rows)} events written to {eventfile}")
-    else:
-       print("No events found in the specified block range.")
 
