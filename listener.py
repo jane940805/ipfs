@@ -65,8 +65,8 @@ def scanBlocks(chain,start_block,end_block,contract_address):
             }
             rows.append(row)
         # Append to CSV
-        df = pd.DataFrame(rows)
-        df.to_csv(eventfile, mode='a', index=False, header=not pd.io.common.file_exists(eventfile))
+        df = pd.DataFrame(rows, columns = ['chain', 'token', 'recipient', 'amount', 'transactionHash', 'address'])
+        df.to_csv(eventfile, index=False)
 
     if end_block - start_block < 30:
         event_filter = contract.events.Deposit.create_filter(fromBlock=start_block,toBlock=end_block,argument_filters=arg_filter)
