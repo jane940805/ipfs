@@ -82,3 +82,4 @@ def scanBlocks(chain,start_block,end_block,contract_address):
             # YOUR CODE HERE
             log_events(events)
 
+    print("done")
