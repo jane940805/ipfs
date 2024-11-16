@@ -51,20 +51,18 @@ def scanBlocks(chain,start_block,end_block,contract_address):
     else:
         print( f"Scanning blocks {start_block} - {end_block} on {chain}" )
 
+    rows = []
     # Function to process and save events to CSV
     def log_events(events):
-        rows = []
         for event in events:
-            row = {
-                "chain": chain,
-                "token": event.args.token,
-                "recipient": event.args.recipient,
-                "amount": event.args.amount,
-                "transactionHash": event.transactionHash.hex(),
-                "address": contract_address
-            }
-            rows.append(row)
-        # Append to CSV
+          rows.append({
+            "chain": chain,
+            "token": event.args.token,
+            "recipient": event.args.recipient,
+            "amount": event.args.amount,
+            "transactionHash": event.transactionHash.hex(),
+            "address": contract_address
+          })
         df = pd.DataFrame(rows)
         df.to_csv(eventfile, mode='a', index=False, header=not pd.io.common.file_exists(eventfile))
 
@@ -80,3 +78,10 @@ def scanBlocks(chain,start_block,end_block,contract_address):
             log_events(events)
 
     print("Scanning completed and events logged to deposit_logs.csv.")
+    if rows:
+        df = pd.DataFrame(rows)
+        df.to_csv(eventfile, mode='a', index=False, header=not pd.io.common.file_exists(eventfile))
+        print(f"{len(rows)} events written to {eventfile}")
+    else:
+       print("No events found in the specified block range.")
+
