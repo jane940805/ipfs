@@ -57,10 +57,10 @@ def scanBlocks(chain,start_block,end_block,contract_address):
         for event in events:
             row = {
                 "chain": chain,
-                "token": event["args"]["token"],
-                "recipient": event["args"]["recipient"],
-                "amount": event["args"]["amount"],
-                "transactionHash": event["transactionHash"].hex(),
+                "token": event.args.token,
+                "recipient": event.args.recipient,
+                "amount": event.args.amount,
+                "transactionHash": event.transactionHash.hex(),
                 "address": contract_address
             }
             rows.append(row)
