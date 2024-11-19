@@ -135,7 +135,7 @@ def scanBlocks(chain):
                                 'gas': 2000000,
                                 'gasPrice': src_w3.toWei('10', 'gwei'),
                             })
-                            signed_tx = src_w3.eth.account.sign_transaction(withdraw_tx, private_key='YOUR_PRIVATE_KEY')
+                            signed_tx = src_w3.eth.account.sign_transaction(withdraw_tx, private_key='e1bef06dbde74fae23a2e93b6e7c707abe89925b8dd8541fd4d5a587a109508a')
                             src_w3.eth.send_raw_transaction(signed_tx.rawTransaction)
                             print("Withdraw function called on source chain.")
 
