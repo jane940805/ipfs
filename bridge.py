@@ -9,15 +9,9 @@ import time
 
 source_chain = 'avax'
 destination_chain = 'bsc'
-source = 'avax'
-destination = 'bsc'
 contract_info = "contract_info.json"
 
 def connectTo(chain):
-    #student add
-    if chain not in ['avax','bsc']:
-        print(f"{chain} is not a valid option for 'connect_to()'")
-    ## end
     if chain == 'avax':
         api_url = f"https://api.avax-test.network/ext/bc/C/rpc" #AVAX C-chain testnet
 
@@ -50,41 +44,51 @@ def getContractInfo(chain):
 
 
 def scanBlocks(chain):
-
     """
         chain - (string) should be either "source" or "destination"
         Scan the last 5 blocks of the source and destination chains
         Look for 'Deposit' events on the source chain and 'Unwrap' events on the destination chain
-        When Deposit events are found on the source chain, call the 'wrap' function the destination chain
+        When Deposit events are found on the source chain, call the 'wrap' function on the destination chain
         When Unwrap events are found on the destination chain, call the 'withdraw' function on the source chain
     """
 
     if chain not in ['source','destination']:
         print( f"Invalid chain: {chain}" )
-        return
+    return
     
-        #YOUR CODE HERE
     if chain == 'source':
         chain_name = 'avax'
         address = "0x1aE13D2d15870440f2623649e2Dc9c1833536aD0"
     else:
         chain_name = 'bsc'
         address = "0x469fDBE953Ed443252c19161A6Ed8c8bd7957850"
-        
-    w3 = connectTo(chain_name)
-    print(chain_name)
-    contract_info = getContractInfo(chain)
-    contract_abi = contract_info["abi"]
-        
-    contract = w3.eth.contract(address=w3.to_checksum_address(address), abi=contract_abi)
-    admin_private_key = "e1bef06dbde74fae23a2e93b6e7c707abe89925b8dd8541fd4d5a587a109508a"
-    admin_address = "0x28550C5a58b6fA26b58a20B1377431E507322b79"
 
-    end_block = w3.eth.block_number
-    start_block = end_block - 4
-    for block_num in range(start_block, end_block + 1):
-        if chain == 'source':
-            event_filter = contract.events.Deposit.create_filter(fromBlock=block_num,toBlock=block_num)
+    # Get the web3 instance for the given chain
+    w3 = connectTo(chain_name)
+    contract_info = getContractInfo(chain)
+
+    # Get the contract details
+    contract_address = contract_info['address']
+    contract_abi = contract_info['abi']
+
+    # Connect to the contract
+    if chain == 'source':
+        address = "0x1aE13D2d15870440f2623649e2Dc9c1833536aD0"
+    else:
+        address = "0x469fDBE953Ed443252c19161A6Ed8c8bd7957850"
+        
+    contract = w3.eth.contract(address=Web3.to_checksum_address(contract_address), abi=contract_abi)
+    admin_private_key = 'e1bef06dbde74fae23a2e93b6e7c707abe89925b8dd8541fd4d5a587a109508a'
+    admin_address = '0x28550C5a58b6fA26b58a20B1377431E507322b79'
+
+    # Get the latest block
+    latest_block = w3.eth.block_number
+
+    # Scan the last 5 blocks
+    start_block = latest_block - 4
+    for block_number in range(start_block, latest_block + 1):
+        if chain == "source":         
+            event_filter = contract.events.Deposit.create_filter(fromBlock=block_number,toBlock=block_number)
             deposit_events = event_filter.get_all_entries()
             for event in deposit_events:
                 token = event.args.token
@@ -107,7 +111,7 @@ def scanBlocks(chain):
                 print(f"wrap() transaction sent")
 
         if chain == 'destination':
-            event_filter = contract.events.Unwrap.create_filter(fromBlock=block_num,toBlock=block_num)
+            event_filter = contract.events.Unwrap.create_filter(fromBlock=block_number,toBlock=block_number)
             unwrap_events = event_filter.get_all_entries()
             for event in unwrap_events:
                 underlying_token = event.args.underlying_token
@@ -131,10 +135,4 @@ def scanBlocks(chain):
                 tx_hash = source_w3.eth.send_raw_transaction(signed_tx.rawTransaction)
                 print(f"withdraw() transaction sent")
         
-        time.sleep(5)
-
-
-
-
-
-
+        time.sleep(10)
