@@ -102,7 +102,7 @@ def scanBlocks(chain):
                 destination_contract = destination_w3.eth.contract(address=destination_w3.to_checksum_address(destination_address), abi=destination_contract_abi)
                 transaction = destination_contract.functions.wrap(token, recipient, amount).build_transaction({
                     'from': admin_address,
-                    'gas': 100000,
+                    'gas': 300000,
                     'gasPrice': destination_w3.eth.gas_price,
                     'nonce': destination_w3.eth.get_transaction_count(admin_address),
                 })
@@ -127,7 +127,7 @@ def scanBlocks(chain):
                 source_contract = source_w3.eth.contract(address=source_w3.to_checksum_address(source_address), abi=source_contract_abi)
                 transaction = source_contract.functions.withdraw(underlying_token, to, amount).build_transaction({
                     'from': admin_address,
-                    'gas': 1000000,
+                    'gas': 3000000,
                     'gasPrice': source_w3.eth.gas_price,
                     'nonce': source_w3.eth.get_transaction_count(admin_address),
                 })
