@@ -68,7 +68,7 @@ def scanBlocks(chain):
     contract_info = getContractInfo(chain)
 
     # Get the contract details
-    contract_abi = contract_info['abi']
+    contract_abi = contract_info["abi"]
     ##contract = w3.eth.contract(address=Web3.to_checksum_address(contract_address), abi=contract_abi)
     contract = w3.eth.contract(address=w3.to_checksum_address(address), abi=contract_abi)
     admin_private_key = 'e1bef06dbde74fae23a2e93b6e7c707abe89925b8dd8541fd4d5a587a109508a'
