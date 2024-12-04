@@ -56,21 +56,29 @@ def scanBlocks(chain):
         return
     
         #YOUR CODE HERE
+    # Connect to the contract
     if chain == 'source':
         chain_name = 'avax'
         address = "0x1aE13D2d15870440f2623649e2Dc9c1833536aD0"
     else:
         chain_name = 'bsc'
         address = "0x469fDBE953Ed443252c19161A6Ed8c8bd7957850"
-        
+
+    # Get the web3 instance for the given chain
     w3 = connectTo(chain_name)
     contract_info = getContractInfo(chain)
+
+    # Get the contract details
+    ##contract_address = contract_info['address']
     contract_abi = contract_info["abi"]
     contract = w3.eth.contract(address=w3.to_checksum_address(address), abi=contract_abi)
     admin_private_key = 'e1bef06dbde74fae23a2e93b6e7c707abe89925b8dd8541fd4d5a587a109508a'
     admin_address = '0x28550C5a58b6fA26b58a20B1377431E507322b79'
 
+    # Get the latest block
     latest_block = w3.eth.block_number
+
+    # Scan the last 5 blocks
     start_block = latest_block - 4
     for block_num in range(start_block, latest_block + 1):
         if chain == 'source':
