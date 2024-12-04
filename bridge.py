@@ -74,7 +74,7 @@ def scanBlocks(chain):
     w3 = connectTo(chain_name)
     contract_info = getContractInfo(chain)
     contract_abi = contract_info["abi"]
-    address = "0xfd6D429413Ed90a6909b3E4fb301970ad60A8C75"
+    ##address = "0xfd6D429413Ed90a6909b3E4fb301970ad60A8C75"
     contract = w3.eth.contract(address=w3.to_checksum_address(address), abi=contract_abi)
     admin_private_key = 'e1bef06dbde74fae23a2e93b6e7c707abe89925b8dd8541fd4d5a587a109508a'
     admin_address = '0x28550C5a58b6fA26b58a20B1377431E507322b79'
